@@ -1,0 +1,88 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Random Do</title>
+	<meta name="description" content="Randomnize your to-do list.">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="vendor/normalize.css">
+</head>
+<body>
+<ol>
+    <li>Fill in to-do list.
+    <li>Hit "Skip" or "Done" to get started.
+</ol>
+<style>
+div{
+    display: inline-block;
+    margin: 2em;
+    vertical-align:text-top;
+}
+lable{
+    display: block;
+}
+textarea{
+    height: 10em;
+}
+</style>
+<div>
+    <lable for="todo">To-do:</lable>
+    <textarea id="todo"></textarea>
+</div>
+<div>
+    <span>Next:</span>
+    <span id="selected"></span><br/>
+    <span>
+         <button type="button" onclick="skip()">Skip</button> 
+         <button type="button" onclick="done()">Done</button> 
+    </span>
+</div>
+<div>
+    <lable for="done">Done:</lable>
+    <textarea id="done"></textarea>
+</div>
+<script>
+function randomLine(textarea){
+    var lines = textarea.value.split('\n');
+    return lines[Math.floor(Math.random()*lines.length)];
+}
+function remove(textarea,line){
+    var lines = textarea.value.split('\n');
+    for(var i = 0; i<lines.length;  i++){
+        if(lines[i] === line){
+            lines.splice(i, 1);
+            break;
+        }
+    }
+    textarea.value = lines.join('\n')
+}
+function cleanLines(textarea){
+    var lines = textarea.value.split('\n');
+    for(var i = 0; i<lines.length;  i++){
+        if(lines[i].trim() === ""){
+            lines.splice(i, 1);
+        }
+    }
+    textarea.value = lines.join('\n')
+}
+function skip(){
+    var todo = document.getElementById("todo");
+    cleanLines(todo);
+    var line = randomLine(todo);
+    var selected = document.getElementById("selected");
+    selected.innerHTML = '';
+    selected.appendChild(document.createTextNode(line));
+}
+function done(){
+    var selected = document.getElementById("selected");
+    var line = selected.innerHTML;
+    remove(document.getElementById("todo"), line);
+    var done = document.getElementById("done");
+    done.value += "\n" + line;
+    cleanLines(done);
+    skip();
+}
+</script>
+</body>
+</html>
